@@ -31,7 +31,10 @@
                :as :json}))
 
 
-(defn build-app [client-id masl4j-token-cache-secret-url access-token-for-key-vault tenant-id]
+(defn build-app [client-id
+                 masl4j-token-cache-secret-url
+                 access-token-for-key-vault
+                 tenant-id]
   (let [token-cache-aspect (reify ITokenCacheAccessAspect
                              (beforeCacheAccess [this iTokenCacheAccessContext]
 
@@ -48,9 +51,15 @@
         (authority (format "https://login.microsoftonline.com/%s/" tenant-id))
         build)))
 
-(defn device-code-interactive-login [tenant-id client-id client-secret scope masl4j-token-cache-secret-url]
-  (let [access-token-for-key-vault (azure/do-client-credentials  tenant-id "https://vault.azure.net" client-id client-secret)
-        app (build-app client-id masl4j-token-cache-secret-url access-token-for-key-vault tenant-id)
+(defn device-code-interactive-login
+  [tenant-id
+   masl4j-token-cache-hv-secret-url
+   client-id-for-kv
+   client-secret-for-kv
+   client-id
+   scope]
+  (let [access-token-for-key-vault (azure/do-client-credentials  tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)
+        app (build-app client-id masl4j-token-cache-kv-secret-url access-token-for-key-vault tenant-id)
         consumer
         (reify Consumer
           (accept [this t]
@@ -82,9 +91,17 @@
 
 
   "
-  [user-name tenant-id client-id client-secret scope masl4j-token-cache-key-vault-secret-url]
-  (let [access-token-for-key-vault (azure/do-client-credentials tenant-id "https://vault.azure.net" client-id client-secret)
-        app (build-app client-id masl4j-token-cache-key-vault-secret-url access-token-for-key-vault tenant-id)
+  [user-name
+   tenant-id
+   masl4j-token-cache-kv-secret-url
+   client-id-for-kv
+   client-secret-for-kv
+
+   client-id
+   scope]
+
+  (let [access-token-for-key-vault (azure/do-client-credentials tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)
+        app (build-app client-id masl4j-token-cache-kv-secret-url access-token-for-key-vault tenant-id)
 
         accounts
         (iterator-seq

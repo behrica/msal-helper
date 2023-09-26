@@ -1,5 +1,5 @@
 {:deps {
         com.microsoft.azure/msal4j {:mvn/version "1.13.10"}
         com.fasterxml.jackson.core/jackson-core {:mvn/version  "2.13.4"}
-        clj-http/clj-http {:mvn/version "3.7.0"}
-        cheshire/cheshire {:mvn/version "5.8.0"}}}
+        clj-http/clj-http {:mvn/version "3.12.3"}
+        cheshire/cheshire {:mvn/version "5.12.0"}}}
