@@ -1,5 +1,6 @@
 (ns msahelper.azure
   (:require
+   [cheshire.core :as json]
    [clj-http.client :as client]))
 
    
@@ -18,6 +19,21 @@
    
 
 
+(defn get-secret-data [secret-url access-token]
+  (->
+   (client/get (format  "%s?api-version=7.0" secret-url)
+               {:headers {:Authorization (str "Bearer " access-token)}
+                :as :json})
+   :body
+   :value))
+
+(defn set-secret-data [secret-url data access-token]
+  (client/put (format  "%s?api-version=7.0" secret-url)
+              {:form-params {:value data}
+               :headers {:Authorization (str "Bearer " access-token)}
+               :content-type :json
+               :as :json}))
+
 
 
 (defn call-ms-graph[f suffix access-token]
@@ -31,3 +47,17 @@
 
 (defn me [access-token]
   (call-ms-graph client/get  "me" access-token))
+
+(comment
+  (defn send-mail [access-token to subject body-text]
+    (client/post (str "https://graph.microsoft.com/v1.0/" "me/SendMail")
+
+                 {:headers {:Authorization (str "Bearer " access-token)
+                            :Accept "application/json"}
+
+                  :as :json
+                  :content-type :json
+                  :body (json/encode {:Message {:subject subject
+                                                :body  {  :contentType "Text"
+                                                        :content body-text}
+                                                :toRecipients [ {:emailAddress {:address to}}]}})})))

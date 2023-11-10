@@ -1,7 +1,6 @@
 (ns msahelper.msa
   (:require
    [msahelper.azure :as azure]
-   [clj-http.client :as client]
    [clojure.string :as str])
 
 
@@ -15,20 +14,6 @@
 
 
 
-(defn get-token-cache-data [masl4j-token-cache-secret-url access-token]
-  (->
-   (client/get (format  "%s?api-version=7.0" masl4j-token-cache-secret-url)
-               {:headers {:Authorization (str "Bearer " access-token)}
-                :as :json})
-   :body
-   :value))
-
-(defn set-token-cache-data [masl4j-token-cache-secret-url data access-token]
-  (client/put (format  "%s?api-version=7.0" masl4j-token-cache-secret-url)
-              {:form-params {:value data}
-               :headers {:Authorization (str "Bearer " access-token)}
-               :content-type :json
-               :as :json}))
 
 
 (defn build-app [client-id
@@ -38,14 +23,14 @@
   (let [token-cache-aspect (reify ITokenCacheAccessAspect
                              (beforeCacheAccess [this iTokenCacheAccessContext]
 
-                               (let [data (get-token-cache-data masl4j-token-cache-secret-url access-token-for-key-vault)]
+                               (let [data (azure/get-secret-data masl4j-token-cache-secret-url access-token-for-key-vault)]
                                  (.. iTokenCacheAccessContext tokenCache (deserialize data))))
 
 
                              (afterCacheAccess [this iTokenCacheAccessContext]
                                (let [data (.. iTokenCacheAccessContext tokenCache serialize)]
-                                 (println "set token cache !!!")
-                                 (set-token-cache-data masl4j-token-cache-secret-url data access-token-for-key-vault))))]
+                                 (println "set data in cache !!!")
+                                 (azure/set-secret-data masl4j-token-cache-secret-url data access-token-for-key-vault))))]
     (.. (PublicClientApplication/builder client-id)
         (setTokenCacheAccessAspect token-cache-aspect)
         (authority (format "https://login.microsoftonline.com/%s/" tenant-id))
@@ -53,7 +38,7 @@
 
 (defn device-code-interactive-login
   [tenant-id
-   masl4j-token-cache-hv-secret-url
+   masl4j-token-cache-kv-secret-url
    client-id-for-kv
    client-secret-for-kv
    client-id
@@ -96,7 +81,6 @@
    masl4j-token-cache-kv-secret-url
    client-id-for-kv
    client-secret-for-kv
-
    client-id
    scope]
 
@@ -115,5 +99,7 @@
 
         account (get account-map user-name)
         silent-parameters
-        (.. (SilentParameters/builder scope account) build)]
+        (.. (SilentParameters/builder scope account)
+            (forceRefresh true)
+            build)]
     (.. (.acquireTokenSilently app silent-parameters) join)))
