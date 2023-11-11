@@ -1,7 +1,9 @@
-(ns msahelper.msa
+(ns msal-helper.msal
   (:require
-   [msahelper.azure :as azure]
-   [clojure.string :as str])
+   [msal-helper.azure :as azure]
+   [clojure.string :as str]
+   [cheshire.core :as json])
+
 
 
   (:import
@@ -22,6 +24,7 @@
                  tenant-id]
   (let [token-cache-aspect (reify ITokenCacheAccessAspect
                              (beforeCacheAccess [this iTokenCacheAccessContext]
+                               ;; (println "get data from cache")
 
                                (let [data (azure/get-secret-data masl4j-token-cache-secret-url access-token-for-key-vault)]
                                  (.. iTokenCacheAccessContext tokenCache (deserialize data))))
@@ -29,7 +32,8 @@
 
                              (afterCacheAccess [this iTokenCacheAccessContext]
                                (let [data (.. iTokenCacheAccessContext tokenCache serialize)]
-                                 (println "set data in cache !!!")
+                                 (println "set data into cache ")
+                                 ;; (clojure.pprint/pprint (json/decode data keyword))
                                  (azure/set-secret-data masl4j-token-cache-secret-url data access-token-for-key-vault))))]
     (.. (PublicClientApplication/builder client-id)
         (setTokenCacheAccessAspect token-cache-aspect)

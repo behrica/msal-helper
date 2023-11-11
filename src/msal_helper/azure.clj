@@ -1,4 +1,4 @@
-(ns msahelper.azure
+(ns msal-helper.azure
   (:require
    [cheshire.core :as json]
    [clj-http.client :as client]))
