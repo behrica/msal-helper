@@ -41,6 +41,18 @@
         build)))
 
 (defn device-code-interactive-login
+  "Authenticates interactively via device code flow and populates the cache. (a given Azure Key Vault)
+  See function `try-silent-authenticate` for parameters.
+  It returns a `java.util.concurrent.CompletableFuture` object which on de-referencing it
+  will block and print on console the  code to use interaticely with Microsofts
+  device code endpoint: https://microsoft.com/devicelogin
+  The dereferenced value will be of type `com.microsoft.aad.adal4j.AuthenticationResult` and containing the access codes.
+
+  After sucessfull interactive authentication the token data will be cached
+  and following calls to `try-silent-authenticate` work without user intercation.
+
+
+  "
   [tenant-id
    masl4j-token-cache-kv-secret-url
    client-id-for-kv
@@ -73,12 +85,18 @@
 
 (defn try-silent-authenticate
   "Tries to authenticate silently with Microsoft Identity without user interaction.
-  For this it reads token cache data from the specified Azure key vault `masl4j-token-cache-key-vault-secret-url`.
-  It uses `client-id` nad `client-secret` as autnetiction for the key vaul, so teh app `client-id` needs to have adequate
-  permission on the key vault to read and write the seccret specified by `masl4j-token-cache-key-vault-secret-url`
+
+  It uses the given Azure Key Vault Secret as token cache.
+  For this it reads token cache data from the specified Azure key vault secret `masl4j-token-cache-key-vault-secret-url`.
+  It uses `client-id-for-kv` and `client-secret-for-kv` to authenticate to the key vault, so the Azure application `client-id-for-kv`
+  needs to have adequate  permission on the key vault to read and write the secret specified by `masl4j-token-cache-key-vault-secret-url`
+
   The user specified by `user-name` need to be in the cached token data.
+  `tenant-id` needs to be the tenant of the user-name
+  `client-id` is the app to be authenticated for with the scope `scope`
 
-
+  It returns on sucess an object of type `com.microsoft.aad.adal4j.AuthenticationResult` which contains the access token for the given user (if found
+  in cached data)
   "
   [user-name
    tenant-id
