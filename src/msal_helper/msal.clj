@@ -32,7 +32,7 @@
 
                              (afterCacheAccess [this iTokenCacheAccessContext]
                                (let [data (.. iTokenCacheAccessContext tokenCache serialize)]
-                                 (println "set data into cache ")
+                                 ;;(println "set data into cache ")
                                  ;; (clojure.pprint/pprint (json/decode data keyword))
                                  (azure/set-secret-data masl4j-token-cache-secret-url data access-token-for-key-vault))))]
     (.. (PublicClientApplication/builder client-id)
