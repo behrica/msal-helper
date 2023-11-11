@@ -9,5 +9,5 @@ It supports currently one (= my) scenario:
   - cache tokens in a Azure Key vault
   - allows to "init the cache" via the device code flow and commandline interactivity
   - after cache initialisation tokens can be obtained without need for user interactivity
-  - the tokens a "refreshed" on each usage
+  - the token gets "refreshed" on each use which allow for long-term non-interatice authentication
   
