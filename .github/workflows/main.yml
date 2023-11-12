@@ -1,32 +1,41 @@
-- name: Setup Clojure
-  # You may pin to the exact commit or the version.
-  # uses: DeLaGuardo/setup-clojure@0fc99a3bcdd086349bfb01a9262382fe3d37cd6d
-  uses: DeLaGuardo/setup-clojure@12.1
-  with:
-    # The Leiningen version to make available on the path.
-    lein: # optional
-    # The boot-clj version to make available on the path.
-    boot: # optional
-    # [DEPRECATED] The tools deps version to make available on the path.
-    tools-deps: # optional
-    # Clojure CLI version to make available on the path.
-    cli: # optional
-    # [DEPRECATED] On Windows platform, it will replace official Clojure CLI with the `deps.clj` of its specific version, `latest` can be used. Useful for running `clojure` command from `cmd.exe`.
+on:
+  push:
+    branches:
+    - main
 
-    cmd-exe-workaround: # optional
-    # Babashka version to install, `latest` can be used.
-    bb: # optional
-    # Clj-kondo version to install, `latest` can be used.
-    clj-kondo: # optional
-    # cljfmt version to install, `latest` can be used.
-    cljfmt: # optional
-    # cljstyle version to install, `latest` can be used.
-    cljstyle: # optional
-    # zprint version to install, `latest` can be used.
-    zprint: # optional
-    # To fix rate limit errors, provide `secrets.GITHUB_TOKEN` value to this field. More info: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
-
-    github-token: # optional, default is ${{ github.token }}
-    # Set to `true` to fix problems related to wrongly populated tool cache
-
-    invalidate-cache: # optional
+jobs:
+  my_first_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Clojure
+        # You may pin to the exact commit or the version.
+        # uses: DeLaGuardo/setup-clojure@0fc99a3bcdd086349bfb01a9262382fe3d37cd6d
+        uses: DeLaGuardo/setup-clojure@12.1
+        with:
+          # The Leiningen version to make available on the path.
+          lein: # optional
+          # The boot-clj version to make available on the path.
+          boot: # optional
+          # [DEPRECATED] The tools deps version to make available on the path.
+          tools-deps: # optional
+          # Clojure CLI version to make available on the path.
+          cli: # optional
+          # [DEPRECATED] On Windows platform, it will replace official Clojure CLI with the `deps.clj` of its specific version, `latest` can be used. Useful for running `clojure` command from `cmd.exe`.
+      
+          cmd-exe-workaround: # optional
+          # Babashka version to install, `latest` can be used.
+          bb: # optional
+          # Clj-kondo version to install, `latest` can be used.
+          clj-kondo: # optional
+          # cljfmt version to install, `latest` can be used.
+          cljfmt: # optional
+          # cljstyle version to install, `latest` can be used.
+          cljstyle: # optional
+          # zprint version to install, `latest` can be used.
+          zprint: # optional
+          # To fix rate limit errors, provide `secrets.GITHUB_TOKEN` value to this field. More info: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+      
+          github-token: # optional, default is ${{ github.token }}
+          # Set to `true` to fix problems related to wrongly populated tool cache
+      
+          invalidate-cache: # optional
