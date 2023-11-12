@@ -27,7 +27,15 @@ jobs:
 
       - name: Run tests
         env: # Or as an environment variable
+              TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+              TEST_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
               TEST_CLIENT_ID: ${{ secrets.TEST_CLIENT_ID }}
+              TEST_KV_URL: ${{ secrets.TEST_KV_URL }}
+              TEST_KV_CLIENT_ID: ${{ secrets.KV_CLIENT_ID }}
+              TEST_KV_CLIENT_SECRET: ${{ secrets.KV_CLIENT_SECRET }}
+              TEST_EXPECTED_EMAIL: ${{ secrets.TEST_EXPECTED_EMAIL }}
+              TEST_SCOPE: ${{ secrets.TEST_SCOPE }}
+
 
         run: bin/koacha
       
