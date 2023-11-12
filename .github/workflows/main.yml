@@ -11,8 +11,7 @@
     tools-deps: # optional
     # Clojure CLI version to make available on the path.
     cli: # optional
-    # [DEPRECATED] On Windows platform, it will replace official Clojure CLI with the `deps.clj` of its specific version, `latest` can be used.
-Useful for running `clojure` command from `cmd.exe`.
+    # [DEPRECATED] On Windows platform, it will replace official Clojure CLI with the `deps.clj` of its specific version, `latest` can be used. Useful for running `clojure` command from `cmd.exe`.
 
     cmd-exe-workaround: # optional
     # Babashka version to install, `latest` can be used.
