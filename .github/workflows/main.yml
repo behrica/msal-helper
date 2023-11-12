@@ -26,5 +26,8 @@ jobs:
           zprint: 1.2.3                # zprint
 
       - name: Run tests
+        env: # Or as an environment variable
+              TEST_CLIENT_ID: ${{ secrets.TEST_CLIENT_ID }}
+
         run: bin/koacha
       

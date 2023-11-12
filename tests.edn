@@ -1,0 +1,10 @@
+#kaocha/v1
+{:bindings
+ {msal-helper.silent-auth-test/*username*                      #env TEST_USERNAME
+  msal-helper.silent-auth-test/*tenant-id*                     #env TEST_TENANT_ID
+  msal-helper.silent-auth-test/*client-id*                     #env TEST_CLIENT_ID
+  msal-helper.silent-auth-test/*azure-kv-secret-url*           #env TEST_KV_URL
+  msal-helper.silent-auth-test/*azure-kv-secret-client-id*     #env TEST_KV_CLIENT_ID
+  msal-helper.silent-auth-test/*azure-kv-secret-client-secret* #env TEST_KV_CLIENT_SECRET
+  msal-helper.silent-auth-test/*expected-email*                #env TEST_EXPECTED_EMAIL
+  msal-helper.silent-auth-test/*scope*                         #env TEST_SCOPE}}
