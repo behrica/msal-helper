@@ -17,24 +17,40 @@
 
 
 
+(defn azure-kv-cache [tenant-id
+                      masl4j-token-cache-kv-secret-url
+                      client-id-for-kv
+                      client-secret-for-kv]
+  {:get-data-fn (fn []
+                  (let [access-token-for-key-vault (azure/do-client-credentials  tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)]
+                    (azure/get-secret-data masl4j-token-cache-kv-secret-url access-token-for-key-vault)))
+   :set-data-fn (fn [data]
+                  (let [access-token-for-key-vault (azure/do-client-credentials  tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)]
+                   (azure/set-secret-data masl4j-token-cache-kv-secret-url data access-token-for-key-vault)))})
 
-(defn build-app [client-id
-                 masl4j-token-cache-secret-url
-                 access-token-for-key-vault
-                 tenant-id]
+
+
+
+
+
+(defn- build-app [tenant-id
+                  client-id
+                  cache]
+                  
   (let [token-cache-aspect (reify ITokenCacheAccessAspect
                              (beforeCacheAccess [this iTokenCacheAccessContext]
                                ;; (println "get data from cache")
 
-                               (let [data (azure/get-secret-data masl4j-token-cache-secret-url access-token-for-key-vault)]
+                               (let [data ((:get-data-fn cache))]
+                                 ;;
+
                                  (.. iTokenCacheAccessContext tokenCache (deserialize data))))
 
 
                              (afterCacheAccess [this iTokenCacheAccessContext]
                                (let [data (.. iTokenCacheAccessContext tokenCache serialize)]
-                                 ;;(println "set data into cache ")
-                                 ;; (clojure.pprint/pprint (json/decode data keyword))
-                                 (azure/set-secret-data masl4j-token-cache-secret-url data access-token-for-key-vault))))]
+                                 ((:set-data-fn cache) data))))]
+
     (.. (PublicClientApplication/builder client-id)
         (setTokenCacheAccessAspect token-cache-aspect)
         (authority (format "https://login.microsoftonline.com/%s/" tenant-id))
@@ -54,13 +70,10 @@
 
   "
   [tenant-id
-   masl4j-token-cache-kv-secret-url
-   client-id-for-kv
-   client-secret-for-kv
    client-id
-   scope]
-  (let [access-token-for-key-vault (azure/do-client-credentials  tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)
-        app (build-app client-id masl4j-token-cache-kv-secret-url access-token-for-key-vault tenant-id)
+   scope
+   cache]
+  (let [app (build-app tenant-id client-id cache)
         consumer
         (reify Consumer
           (accept [this t]
@@ -100,14 +113,16 @@
   "
   [user-name
    tenant-id
-   masl4j-token-cache-kv-secret-url
-   client-id-for-kv
-   client-secret-for-kv
    client-id
-   scope]
+   scope
+   cache]
 
-  (let [access-token-for-key-vault (azure/do-client-credentials tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)
-        app (build-app client-id masl4j-token-cache-kv-secret-url access-token-for-key-vault tenant-id)
+  (let [;; access-token-for-key-vault (azure/do-client-credentials tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)
+        app (build-app
+             tenant-id
+             client-id
+             cache)
+                       
 
         accounts
         (iterator-seq
