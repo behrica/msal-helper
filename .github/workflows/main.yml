@@ -34,7 +34,6 @@ jobs:
               TEST_KV_CLIENT_ID:     ${{ secrets.TEST_KV_CLIENT_ID }}
               TEST_KV_CLIENT_SECRET: ${{ secrets.TEST_KV_CLIENT_SECRET }}
               TEST_EXPECTED_EMAIL:   ${{ secrets.TEST_EXPECTED_EMAIL }}
-              TEST_SCOPE:            ${{ secrets.TEST_SCOPE }}
 
 
         run: bin/koacha

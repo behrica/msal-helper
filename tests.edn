@@ -6,5 +6,4 @@
   msal-helper.silent-auth-test/*azure-kv-secret-url*           #env TEST_KV_URL
   msal-helper.silent-auth-test/*azure-kv-secret-client-id*     #env TEST_KV_CLIENT_ID
   msal-helper.silent-auth-test/*azure-kv-secret-client-secret* #env TEST_KV_CLIENT_SECRET
-  msal-helper.silent-auth-test/*expected-email*                #env TEST_EXPECTED_EMAIL
-  msal-helper.silent-auth-test/*scope*                         #env TEST_SCOPE}}
+  msal-helper.silent-auth-test/*expected-email*                #env TEST_EXPECTED_EMAIL}}

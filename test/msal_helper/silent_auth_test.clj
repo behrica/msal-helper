@@ -15,7 +15,6 @@
 (def ^:dynamic *azure-kv-secret-client-id* nil)
 (def ^:dynamic *azure-kv-secret-client-secret* nil)
 (def ^:dynamic *expected-email* nil)
-(def ^:dynamic *scope* nil)
 
 
 
@@ -26,7 +25,7 @@
          *username*
          *tenant-id*
          *client-id*
-         *scope*
+         #{"User.Read"}
          (msal/azure-kv-cache
 
           *tenant-id*
