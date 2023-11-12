@@ -33,3 +33,7 @@ jobs:
           cljstyle: 0.15.0             # cljstyle
           cmd-exe-workaround: 'latest' # Replaces `clojure` with `deps.clj` on Windows
           zprint: 1.2.3                # zprint
+
+      - name: Run tests
+        run: bin/koacha
+      
