@@ -1,11 +1,8 @@
 (ns msal-helper.msal
   (:require
    [msal-helper.azure :as azure]
-   [clojure.string :as str]
-   [cheshire.core :as json])
-
-
-
+   [clojure.string :as str])
+   
   (:import
    [com.microsoft.aad.msal4j
     DeviceCodeFlowParameters
@@ -117,8 +114,7 @@
    scope
    cache]
 
-  (let [;; access-token-for-key-vault (azure/do-client-credentials tenant-id "https://vault.azure.net" client-id-for-kv client-secret-for-kv)
-        app (build-app
+  (let [app (build-app
              tenant-id
              client-id
              cache)

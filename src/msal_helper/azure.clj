@@ -4,7 +4,6 @@
    [clj-http.client :as client]))
 
    
-   
 (defn do-client-credentials[tenant-id resource client-id client-secret]
   (->
    (client/post (str "https://login.microsoftonline.com/" tenant-id  "/oauth2/token")
