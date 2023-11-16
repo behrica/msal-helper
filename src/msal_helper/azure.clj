@@ -3,6 +3,7 @@
    [cheshire.core :as json]
    [clj-http.client :as client]))
 
+
    
 (defn do-client-credentials[tenant-id resource client-id client-secret]
   (->

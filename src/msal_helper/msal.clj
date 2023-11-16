@@ -12,8 +12,6 @@
    [java.util.function Consumer]))
 
 
-
-
 (defn azure-kv-cache [tenant-id
                       masl4j-token-cache-kv-secret-url
                       client-id-for-kv
@@ -27,9 +25,6 @@
 
 
 
-
-
-
 (defn- build-app [tenant-id
                   client-id
                   cache]
@@ -37,13 +32,8 @@
   (let [token-cache-aspect (reify ITokenCacheAccessAspect
                              (beforeCacheAccess [this iTokenCacheAccessContext]
                                ;; (println "get data from cache")
-
                                (let [data ((:get-data-fn cache))]
-                                 ;;
-
                                  (.. iTokenCacheAccessContext tokenCache (deserialize data))))
-
-
                              (afterCacheAccess [this iTokenCacheAccessContext]
                                (let [data (.. iTokenCacheAccessContext tokenCache serialize)]
                                  ((:set-data-fn cache) data))))]
@@ -63,8 +53,6 @@
 
   After sucessfull interactive authentication the token data will be cached
   and following calls to `try-silent-authenticate` work without user intercation.
-
-
   "
   [tenant-id
    client-id
@@ -89,9 +77,6 @@
          build)]
     (.acquireToken app flow-params)))
 
- 
-
-
 
 (defn try-silent-authenticate
   "Tries to authenticate silently with Microsoft Identity without user interaction.
@@ -105,8 +90,8 @@
   `tenant-id` needs to be the tenant of the user-name
   `client-id` is the app to be authenticated for with the scope `scope`
 
-  It returns on sucess an object of type `com.microsoft.aad.adal4j.AuthenticationResult` which contains the access token for the given user (if found
-  in cached data)
+  It returns on sucess an object of type `com.microsoft.aad.adal4j.AuthenticationResult`
+  which contains the access token for the given user (if found in cached data)
   "
   [user-name
    tenant-id
@@ -118,7 +103,6 @@
              tenant-id
              client-id
              cache)
-                       
 
         accounts
         (iterator-seq
